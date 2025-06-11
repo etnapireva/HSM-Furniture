@@ -74,7 +74,7 @@ function App() {
       />
 
           </Routes>
-
+<AboutUs/>
           <Footer />
         </Router>
       </ShopContextProvider>
