@@ -37,7 +37,8 @@
   width: 50px;
   padding: 5px;
   border: 1px solid #ccc;
-  background-color: #fff;
+  background-color: #ffffff;
+  color: black;
 }
 
 .cartitems-remove-icon {
@@ -75,14 +76,14 @@
 .cartitems-total button {
   width: 100%;
   padding: 10px;
-  background-color: #007bff;
+  background-color: #a39c62;
   color: white;
   border: none;
   cursor: pointer;
 }
 
 .cartitems-total button:hover {
-  background-color: #0056b3;
+  background-color: #7c794e;
 }
 
 .cartitems-promocode {
@@ -117,4 +118,33 @@
 hr {
   border: 0.5px solid #ddd;
   margin: 10px 0;
+}
+
+.cart-btn {
+  padding: 12px 24px;
+  font-size: 16px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  margin-top: 15px;
+  margin-right: 10px;
+  transition: 0.3s ease;
+  color: rgb(103, 52, 52);
+  background-color: #be9196;
+}
+
+.checkout-btn {
+  background-color: #28a745; /* ngjyrë jeshile */
+}
+
+.checkout-btn:hover {
+  background-color: #218838;
+}
+
+.clear-btn {
+  background-color: #be9196; /* ngjyrë e kuqe */
+}
+
+.clear-btn:hover {
+  background-color: #966b6f;
 }

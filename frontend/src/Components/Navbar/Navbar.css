@@ -4,7 +4,8 @@
     align-items: center;
     box-shadow: 0 1px 3px -2px black;
     padding: 15px 70px;
-    background-color: #f1eaea;
+    background-color: rgb(223, 213, 202);
+    background: linear-gradient(190deg, #9b977d, #e1ffea22 60%);;
 }
 .nav-logo{
     display: flex;
@@ -24,7 +25,7 @@
     align-items: center;
     list-style: none;
     gap: 40px;
-    color: #572b2b;
+    color: #050505;
     font-size: 16px;
     font-weight: 500;
 }
@@ -42,7 +43,7 @@
     width: 80%;
     height: 3px;
     border-radius: 10px;
-    background: #FF4141;
+    background: #745a5a;
 }
 .nav-login-cart{
     display: flex;

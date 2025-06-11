@@ -60,6 +60,32 @@
     font-size: 18px;
     font-weight: 600;
 }
+
+.add-to-cart-btn {
+  margin-top: 20px;
+  padding: 12px 24px;
+  background-color: #9fab69; /* ngjyrë e gjelbër */
+  color: white;
+  font-size: 16px;
+  font-weight: 600;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.add-to-cart-btn:hover {
+  background-color: #789f7a;
+  transform: scale(1.05);
+  box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
+}
+
+.add-to-cart-btn:active {
+  transform: scale(0.98);
+  background-color: #3e8e41;
+}
+
 .productdisplay-right-colors {
   display: flex;
   flex-wrap: wrap; /* Ky i lejon ngjyrat të kalojnë në rreshtin tjetër */
@@ -92,6 +118,37 @@
 }
 .productdisplay-right-category span{
     font-weight: 600;
+}
+
+.quantity-control {
+  display: flex;
+  align-items: center;
+  margin-top: 15px;
+  gap: 10px;
+}
+
+.quantity-control button {
+  width: 5%;
+  height: 70%;
+  font-size: 18px;
+  font-weight: bold;
+  background-color: #f2f2f2;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+}
+
+.quantity-control button:hover {
+  background-color: #ddd;
+  transform: scale(1.1);
+}
+
+.quantity-control span {
+  min-width: 30px;
+  font-size: 16px;
+  font-weight: 500;
+  text-align: center;
 }
 
 /* ----- media query------- */

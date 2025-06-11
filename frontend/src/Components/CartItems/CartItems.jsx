@@ -1,10 +1,8 @@
-// src/Components/CartItems/CartItems.jsx
-
 import React, { useContext } from "react";
 import "./CartItems.css";
 import cross_icon from "../Assets/cart_cross_icon.png";
 import { ShopContext } from "../../Context/ShopContext";
-import { mongodb_url, mysql_url, currency } from "../../App";
+import { mysql_url, mongodb_url, currency } from "../../App";
 
 const CartItems = () => {
   const {
@@ -13,27 +11,33 @@ const CartItems = () => {
     removeFromCart,
     clearCart,
     getTotalCartAmount,
+    clearCartOnLogout, // Shto këtë
   } = useContext(ShopContext);
 
-  // 1) Kontroll për artikuj në shportë
-  const hasItems = Object.values(cartItems).some((qty) => qty > 0);
-
-  // 2) Funksioni i checkout-it: dërgon POST në MySQL, pastaj pastrohet shporta
   const handleCheckout = async () => {
+    const token = localStorage.getItem("auth-token");
+    if (!token) {
+      alert("Ju lutemi kyquni për të vazhduar me porosinë!");
+      return;
+    }
+
+    let user_id;
+    try {
+      const decoded = JSON.parse(atob(token.split(".")[1]));
+      user_id = Number(decoded.user.id) || null;
+    } catch {
+      alert("Gabim në autentikim. Ju lutemi kyquni përsëri.");
+      return;
+    }
+
     const orders = products
-      .filter((p) => {
-        const pid = String(p.id);
-        return cartItems[pid] > 0;
-      })
-      .map((p) => {
-        const pid = String(p.id);
-        return {
-          product_id: p.id,
-          quantity: cartItems[pid],
-          total_price: p.price * cartItems[pid],
-          user_id: 1,
-        };
-      });
+      .filter((p) => cartItems[String(p.id)] > 0)
+      .map((p) => ({
+        product_id: p.id,
+        quantity: cartItems[String(p.id)],
+        total_price: p.price * cartItems[String(p.id)],
+        user_id,
+      }));
 
     if (orders.length === 0) {
       alert("Nuk ka artikuj në shportë!");
@@ -47,23 +51,18 @@ const CartItems = () => {
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(order),
         });
-        if (!res.ok) throw new Error(await res.text());
+        if (!res.ok) {
+          const errorBody = await res.json().catch(() => ({}));
+          throw new Error(errorBody.error || res.statusText);
+        }
       }
       alert("Porosia u ruajt me sukses!");
       clearCart();
     } catch (err) {
-      console.error(err);
+      console.error("Checkout error:", err);
       alert("Gabim gjatë porosisë: " + err.message);
     }
   };
-
-  if (!hasItems) {
-    return (
-      <div className="empty-cart-message">
-        <h2>Nuk ka artikuj në shportë për porosi.</h2>
-      </div>
-    );
-  }
 
   return (
     <div className="cartitems">
@@ -83,7 +82,6 @@ const CartItems = () => {
           return (
             <div key={pid}>
               <div className="cartitems-format-main cartitems-format">
-                {/* 3) Shto prefix për imazhin */}
                 <img
                   className="cartitems-product-icon"
                   src={`${mongodb_url}${p.image}`}
@@ -112,7 +110,6 @@ const CartItems = () => {
         }
         return null;
       })}
-
       <div className="cartitems-down">
         <div className="cartitems-total">
           <h1>Cart Totals</h1>
@@ -138,9 +135,12 @@ const CartItems = () => {
               </h3>
             </div>
           </div>
-          {/* 4) Shto butonin e checkout-it */}
-          <button onClick={handleCheckout}>PROCEED TO CHECKOUT</button>
-          <button onClick={clearCart}>CLEAR CART</button>
+          <button className="cart-btn checkout-btn" onClick={handleCheckout}>
+            PROCEED TO CHECKOUT
+          </button>
+          <button className="cart-btn clear-btn" onClick={clearCart}>
+            CLEAR CART
+          </button>
         </div>
       </div>
     </div>

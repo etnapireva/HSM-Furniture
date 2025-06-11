@@ -2,10 +2,22 @@ import React, { useContext, useState } from "react";
 import "./ProductDisplay.css";
 import { ShopContext } from "../../Context/ShopContext";
 import { backend_url, currency } from "../../App";
+import { useNavigate } from "react-router-dom";
 
 const ProductDisplay = ({ product }) => {
   const { addToCart } = useContext(ShopContext);
   const [qty, setQty] = useState(1);
+  const navigate = useNavigate();
+  const token = localStorage.getItem("auth-token"); 
+
+  const handleAddToCart = () => {
+    if (!token) {
+      alert("Ju lutemi kycuni për të shtuar në shportë!");
+      navigate("/login");
+      return;
+    }
+    addToCart(product.id, qty);
+  };
 
   return (
     <div className="productdisplay">
@@ -33,7 +45,7 @@ const ProductDisplay = ({ product }) => {
         </div>
         <button
           className="add-to-cart-btn"
-          onClick={() => addToCart(product.id)}
+          onClick={handleAddToCart} 
         >
           ADD TO CART
         </button>
