@@ -1,0 +1,16 @@
+/* src/Pages/Shop.css */
+
+/* This wrapper only limits the search & products area */
+.shop-page {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+/* keep your grid styling here */
+.products-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 1rem;
+  margin-top: 2rem;
+}
