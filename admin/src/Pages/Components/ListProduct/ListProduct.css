@@ -1,0 +1,143 @@
+.listproduct {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  min-height: 100vh;
+  padding: 30px;
+  margin: 20px auto;
+  border-radius: 12px;
+  background: #ffffff;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+  border: 1px solid #eadfce;
+}
+
+.listproduct h1 {
+  color: #2f2f2f;
+  margin-bottom: 30px;
+  font-size: 2.2rem;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+}
+
+.listproduct-format-main {
+  display: grid;
+  grid-template-columns: 1fr 3fr 1fr 1fr 1fr 1fr 1fr 1fr;
+  gap: 15px;
+  width: 100%;
+  padding: 20px 0px;
+  color: #745a5a;
+  font-size: 15px;
+  font-weight: 600;
+  border-bottom: 2px solid #efe7db;
+}
+
+.listproduct-format {
+  width: 100%;
+  align-items: center;
+  font-weight: 500;
+  padding: 15px 0;
+  border-bottom: 1px solid #efe7db;
+  transition: background-color 0.2s ease;
+}
+
+.listproduct-format:hover {
+  background: #fff8ee;
+}
+
+.listproduct-product-icon {
+  height: 80px;
+  border-radius: 8px;
+  object-fit: cover;
+  border: 1px solid #eadfce;
+}
+
+.listproduct-remove-icon {
+  cursor: pointer;
+  margin: auto;
+  width: 24px;
+  height: 24px;
+  transition: all 0.3s ease;
+  padding: 4px;
+  border-radius: 50%;
+}
+
+.listproduct-remove-icon:hover {
+  background: #ffe6e6;
+  transform: scale(1.1);
+}
+
+.listproduct-allproducts {
+  width: 100%;
+  overflow-y: auto;
+}
+
+.listproduct-allproducts::-webkit-scrollbar {
+  display: none;
+}
+
+.cartitems-product-title {
+  font-weight: 600;
+  color: #2f2f2f;
+}
+
+.loading, .error, .no-products {
+  text-align: center;
+  padding: 40px;
+  color: #745a5a;
+  font-size: 18px;
+  font-weight: 500;
+}
+
+.error h2 {
+  color: #d32f2f;
+  margin-bottom: 15px;
+}
+
+.error button {
+  margin-top: 20px;
+  padding: 12px 24px;
+  background: linear-gradient(135deg, #ad9a83, #8b7355);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.error button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(173, 154, 131, 0.3);
+}
+
+@media(max-width: 800px) {
+  .listproduct {
+    box-sizing: border-box;
+    width: 95%;
+    height: 100%;
+    padding: 20px 15px;
+    margin: 20px auto;
+  }
+  
+  .listproduct h1 {
+    font-size: 1.8rem;
+  }
+  
+  .listproduct-format-main {
+    padding: 15px 0px;
+    color: #745a5a;
+    font-size: 12px;
+    grid-template-columns: 1fr 2fr 1fr 1fr 1fr 1fr 1fr 1fr;
+    gap: 10px;
+  }
+  
+  .listproduct-product-icon {
+    height: 60px;
+  }
+  
+  .listproduct-remove-icon {
+    width: 20px;
+    height: 20px;
+  }
+}
