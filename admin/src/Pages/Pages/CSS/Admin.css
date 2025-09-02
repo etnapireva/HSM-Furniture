@@ -1,0 +1,24 @@
+.admin {
+    display: flex;
+    min-height: 100vh;
+    width: 100%;
+    background: linear-gradient(180deg, #fffaf5, #f5f1ec);
+}
+
+.admin-content {
+    flex: 1;
+    padding: 20px;
+    background: #f8f9fa;
+    overflow-y: auto;
+    width: 100%;
+}
+
+@media(max-width: 800px) {
+    .admin {
+        flex-direction: column;
+    }
+    
+    .admin-content {
+        padding: 15px;
+    }
+}
