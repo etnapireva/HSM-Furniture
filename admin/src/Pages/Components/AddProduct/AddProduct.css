@@ -1,0 +1,131 @@
+.addproduct {
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 1000px;
+  padding: 40px;
+  margin: 20px auto;
+  border-radius: 12px;
+  background: #ffffff;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+  border: 1px solid #eadfce;
+}
+
+.addproduct-itemfield {
+  width: 100%;
+  color: #2f2f2f;
+  font-size: 16px;
+  margin-bottom: 25px;
+}
+
+.addproduct-itemfield p {
+  font-weight: 600;
+  margin-bottom: 8px;
+  color: #745a5a;
+}
+
+.addproduct-itemfield input {
+  box-sizing: border-box;
+  width: 100%;
+  height: 50px;
+  border-radius: 8px;
+  padding: 0 15px;
+  border: 1px solid #eadfce;
+  outline: none;
+  color: #2f2f2f;
+  font-family: inherit;
+  font-size: 14px;
+  background: #ffffff;
+  transition: all 0.3s ease;
+}
+
+.addproduct-itemfield input:focus {
+  border-color: #ad9a83;
+  box-shadow: 0 0 0 3px rgba(173, 154, 131, 0.1);
+}
+
+.addproduct-price {
+  display: flex;
+  gap: 40px;
+}
+
+.add-product-selector {
+  padding: 0 15px;
+  width: 100%;
+  height: 50px;
+  font-size: 14px;
+  color: #2f2f2f;
+  border: 1px solid #eadfce;
+  border-radius: 8px;
+  background: #ffffff;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.add-product-selector:focus {
+  border-color: #ad9a83;
+  outline: none;
+}
+
+.addproduct-itemfield div {
+  display: flex;
+  width: 25%;
+}
+
+.addproduct-thumbnail-img {
+  height: 120px;
+  width: 120px;
+  border-radius: 12px;
+  object-fit: cover;
+  border: 2px dashed #eadfce;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.addproduct-thumbnail-img:hover {
+  border-color: #ad9a83;
+  transform: scale(1.02);
+}
+
+.addproduct-itemfield div img {
+  margin-left: -30px;
+}
+
+.addproduct-btn {
+  margin-top: 40px;
+  width: 180px;
+  height: 50px;
+  border-radius: 8px;
+  background: linear-gradient(135deg, #ad9a83, #8b7355);
+  border: none;
+  cursor: pointer;
+  color: #ffffff;
+  font-size: 16px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(173, 154, 131, 0.3);
+}
+
+.addproduct-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(173, 154, 131, 0.4);
+}
+
+.addproduct-btn:active {
+  transform: translateY(0);
+}
+
+@media(max-width: 800px) {
+  .addproduct {
+    width: auto;
+    padding: 30px 20px;
+    margin: 20px;
+  }
+  
+  .addproduct-itemfield {
+    margin-bottom: 20px;
+  }
+  
+  .addproduct-btn {
+    width: 100%;
+  }
+}
