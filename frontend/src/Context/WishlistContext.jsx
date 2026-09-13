@@ -29,6 +29,7 @@ export const WishlistProvider = ({ children }) => {
       // Load from localStorage for guests
       loadWishlistFromLocal();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // Load wishlist from server
@@ -350,6 +351,7 @@ export const WishlistProvider = ({ children }) => {
     return () => {
       window.removeEventListener('tokenUpdated', handleTokenUpdate);
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isLoggedIn]);
 
   const value = {

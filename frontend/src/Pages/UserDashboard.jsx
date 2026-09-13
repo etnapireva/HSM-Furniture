@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { backend_url } from '../config';
-import { imageUrl } from '../config';
+import { backend_url, imageUrl } from '../config';
 import './UserDashboard.css';
 import toast from 'react-hot-toast';
 
@@ -35,6 +34,7 @@ const UserDashboard = () => {
     if (activeTab === 'orders' && userOrders.length === 0) {
       fetchUserOrders();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [activeTab, lastFetchTime, userOrders.length]);
 
   const fetchUserData = async () => {

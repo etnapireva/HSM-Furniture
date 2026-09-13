@@ -70,7 +70,11 @@ export default function CartItems() {
     return nextErrors;
   };
 
-  const isFormValid = useMemo(() => Object.keys(validateAll(customer)).length === 0, [customer]);
+  const isFormValid = useMemo(
+    () => Object.keys(validateAll(customer)).length === 0,
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [customer]
+  );
 
   const updateField = (e) => {
     const { name, value } = e.target;

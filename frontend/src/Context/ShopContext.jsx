@@ -40,6 +40,7 @@ const ShopContextProvider = ({ children }) => {
   // Initialize products & cart
   useEffect(() => {
     loadProducts();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // Refresh products function

@@ -67,6 +67,7 @@ const RecentlyViewed = ({ maxItems = 5, excludeId }) => {
       window.removeEventListener(UPDATE_EVENT, loadViewed);
       delete window.addToRecentlyViewed;
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [maxItems, hiddenId]);
 
   if (recentlyViewed.length === 0) {
