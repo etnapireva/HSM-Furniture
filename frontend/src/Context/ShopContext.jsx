@@ -1,33 +1,57 @@
 // src/Context/ShopContext.jsx
 import React, { createContext, useEffect, useState } from "react";
-import { backend_url } from "../App";
+import { backend_url } from "../config";
+import { cartKey } from "../config";
 
 export const ShopContext = createContext(null);
 
 const ShopContextProvider = ({ children }) => {
   const [products, setProducts] = useState([]);
-  const [cartItems, setCartItems] = useState({});
+  const [cartItems, setCartItems] = useState(() => {
+    try {
+      return JSON.parse(localStorage.getItem("hsm-cart") || "{}");
+    } catch {
+      return {};
+    }
+  });
+
+  useEffect(() => {
+    localStorage.setItem("hsm-cart", JSON.stringify(cartItems));
+  }, [cartItems]);
+
+  const loadProducts = async () => {
+    try {
+      const res = await fetch(`${backend_url}/allproducts`);
+      const data = await res.json();
+      setProducts(data);
+      setCartItems((prev) => {
+        const next = { ...prev };
+        data.forEach((p) => {
+          const key = cartKey(p);
+          if (next[key] == null) next[key] = 0;
+        });
+        return next;
+      });
+    } catch (err) {
+      console.error("Error fetching products:", err);
+    }
+  };
 
   // Initialize products & cart
   useEffect(() => {
-    // 1) Load all products
-    fetch(`${backend_url}/allproducts`)
-      .then((res) => res.json())
-      .then((data) => {
-        setProducts(data);
-        // Build an empty cart skeleton
-        const empty = {};
-        data.forEach((p) => (empty[p.id] = 0));
-        setCartItems(empty);
-      })
-      .catch((err) => console.error("Error fetching products:", err));
+    loadProducts();
   }, []);
+
+  // Refresh products function
+  const refreshProducts = () => {
+    loadProducts();
+  };
 
   // Add item to cart
   const addToCart = (productId, quantity = 1) => {
     setCartItems((prev) => ({
       ...prev,
-      [productId]: (prev[productId] || 0) + quantity,
+      [cartKey(productId)]: (prev[cartKey(productId)] || 0) + quantity,
     }));
   };
 
@@ -35,14 +59,16 @@ const ShopContextProvider = ({ children }) => {
   const removeFromCart = (productId) => {
     setCartItems((prev) => ({
       ...prev,
-      [productId]: Math.max((prev[productId] || 0) - 1, 0),
+      [cartKey(productId)]: Math.max((prev[cartKey(productId)] || 0) - 1, 0),
     }));
   };
 
   // Clear cart
   const clearCart = () => {
     const cleared = {};
-    products.forEach((p) => (cleared[p.id] = 0));
+    products.forEach((p) => {
+      cleared[cartKey(p)] = 0;
+    });
     setCartItems(cleared);
   };
 
@@ -54,7 +80,8 @@ const ShopContextProvider = ({ children }) => {
   // Total amount
   const getTotalCartAmount = () => {
     return Object.entries(cartItems).reduce((sum, [id, qty]) => {
-      const prod = products.find((p) => p.id === Number(id));
+      if (!qty) return sum;
+      const prod = products.find((p) => cartKey(p) === id);
       return prod ? sum + prod.price * qty : sum;
     }, 0);
   };
@@ -69,6 +96,7 @@ const ShopContextProvider = ({ children }) => {
         clearCart,
         getTotalCartItems,
         getTotalCartAmount,
+        refreshProducts,
       }}
     >
       {children}

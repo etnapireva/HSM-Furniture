@@ -63,7 +63,7 @@ const Reports = () => {
       console.error('Error generating report:', error);
       console.error('Error details:', error.message);
       if (error.message.includes('Unexpected token')) {
-        alert('Server returned invalid response. Please check if the backend is running on port 4001.');
+        alert('Server returned invalid response. Please check that the API is running.');
       } else {
         alert('Error generating report. Please try again.');
       }

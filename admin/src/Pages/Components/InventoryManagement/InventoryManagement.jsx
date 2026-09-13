@@ -136,7 +136,7 @@ const InventoryManagement = () => {
                 <td>
                   <div className="product-info">
                     <img 
-                      src={`http://localhost:4001${product.image}`} 
+                      src={`${backend_url}${product.image}`} 
                       alt={product.name}
                       className="product-image"
                       onError={(e) => {

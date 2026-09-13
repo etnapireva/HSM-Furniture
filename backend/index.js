@@ -1,83 +1,39 @@
-// index.js
-const express  = require("express");
+const express = require("express");
 const mongoose = require("mongoose");
-const jwt      = require("jsonwebtoken");
-const path     = require("path");
-const cors     = require("cors");
-const mysql    = require("mysql2");
-const bcrypt   = require("bcrypt");
-require("dotenv").config();
+const jwt = require("jsonwebtoken");
+const path = require("path");
+const cors = require("cors");
+const bcrypt = require("bcrypt");
+const config = require("./config");
+const { insertOrder, pingMysql, isMysqlConfigured } = require("./db");
+const { User, Product, Order } = require("./models");
+const { seedCatalog } = require("./seed");
+const { attachAccountRoutes } = require("./accountRoutes");
+const { catalogCount, listProducts, findProduct } = require("./catalog");
 
-const app  = express();
-const port = process.env.PORT || 4001;
+const app = express();
 
-// 1) Parse JSON bodies
 app.use(express.json());
 
-// 2) Enable CORS for React app
 app.use(cors({
-  origin: "http://localhost:3000",
-  methods: ["GET","POST","OPTIONS"],
-  allowedHeaders: ["Content-Type","Authorization","auth-token"],
+  origin(origin, callback) {
+    if (!origin || config.corsOrigins.includes(origin) || /^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/.test(origin)) {
+      return callback(null, true);
+    }
+    return callback(null, false);
+  },
+  methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization", "auth-token"],
   credentials: true,
 }));
 
-// 3) Serve images under /images/...
-// AFTER cors middleware
 app.use("/images", express.static(path.join(__dirname, "upload/images")));
 
-// 4) MongoDB connection (include your DB name)
-const mongoUri = process.env.MONGO_URI
-  || "mongodb+srv://etnaHP:Etna1234@cluster0.8sge73d.mongodb.net/";
-mongoose.connect(mongoUri, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-})
-  .then(() => console.log(" Connected to MongoDB"))
-  .catch(err => console.error("MongoDB connection error:", err));
-
-// 5) MySQL connection for orders
-const db = mysql.createConnection({
-  host:     "localhost",
-  user:     "etna",
-  password: "Etna1234",
-  database: "hsm-furniture",
-});
-db.connect(err => {
-  if (err) {
-    console.error("MySQL connection failed:", err);
-    process.exit(1);
-  }
-  console.log(" Connected to MySQL Database (orders)");
-});
-
-// 6) Mongoose models
-const User = mongoose.model("User", new mongoose.Schema({
-  name:     { type: String, required: true },
-  email:    { type: String, required: true, unique: true },
-  password: { type: String, required: true },
-  cartData: { type: Object, default: {} },
-  role:     { type: String, default: "user" },
-}));
-
-const Product = mongoose.model("Product", new mongoose.Schema({
-  id:          Number,
-  name:        String,
-  description: String,
-  image:       String,
-  category:    String,
-  price:       Number,
-  available:   { type: Boolean, default: true },
-  date:        { type: Date, default: Date.now },
-}));
-Product.schema.index({ name: "text", description: "text" });
-
-// 7) Auth middleware
 function fetchuser(req, res, next) {
   const token = req.header("auth-token");
   if (!token) return res.status(401).json({ errors: "Please authenticate" });
   try {
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const decoded = jwt.verify(token, config.jwtSecret);
     req.user = decoded.user;
     next();
   } catch {
@@ -85,9 +41,59 @@ function fetchuser(req, res, next) {
   }
 }
 
-// 8) Routes
+function optionalUser(req, res, next) {
+  const token = req.header("auth-token");
+  if (!token) return next();
+  try {
+    const decoded = jwt.verify(token, config.jwtSecret);
+    req.user = decoded.user;
+  } catch {
+    // Keep checkout working for the current shop cart, which may not send a token.
+  }
+  next();
+}
 
-// Signup
+async function saveOrder({ product_id, quantity, total_price, user_id, customer, payment_method }) {
+  const product = await findProduct(product_id);
+  const extra = {
+    product_name: product?.name || "",
+    product_image: product?.image || "",
+    customer: customer || {},
+    payment_method: payment_method || "manual",
+    payment_status: "completed",
+    status: "pending",
+  };
+  if (isMysqlConfigured()) {
+    try {
+      const orderId = await insertOrder({ product_id, quantity, total_price, user_id });
+      if (orderId != null) {
+        return { store: "mysql", order_id: orderId };
+      }
+    } catch (err) {
+      console.error("MySQL checkout failed, falling back to Mongo:", err.message);
+    }
+  }
+
+  const order = await Order.create({
+    product_id: String(product_id),
+    quantity: Number(quantity),
+    total_price: Number(total_price),
+    user_id: user_id ? String(user_id) : null,
+    ...extra,
+  });
+  return { store: "mongo", order_id: order._id };
+}
+
+app.get("/health", async (_req, res) => {
+  const mysqlOk = isMysqlConfigured() ? await pingMysql() : false;
+  res.json({
+    ok: mongoose.connection.readyState === 1,
+    mongo: mongoose.connection.readyState === 1,
+    mysql: mysqlOk,
+    orders: mysqlOk ? "mysql" : "mongo",
+  });
+});
+
 app.post("/signup", async (req, res) => {
   try {
     const { username, email, password } = req.body;
@@ -97,15 +103,15 @@ app.post("/signup", async (req, res) => {
     const hashed = await bcrypt.hash(password, 10);
     const user = await User.create({ name: username, email, password: hashed });
     const payload = { user: { id: user._id, role: user.role } };
-    const accessToken = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: "15m" });
-    res.json({ success: true, accessToken });
+    const accessToken = jwt.sign(payload, config.jwtSecret, { expiresIn: "7d" });
+    const refreshToken = jwt.sign(payload, config.jwtSecret, { expiresIn: "30d" });
+    res.json({ success: true, accessToken, refreshToken });
   } catch (err) {
     console.error("Signup error:", err);
     res.status(500).json({ error: "Server error" });
   }
 });
 
-// Login
 app.post("/login", async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -118,86 +124,139 @@ app.post("/login", async (req, res) => {
       return res.status(400).json({ success: false, errors: "Invalid credentials" });
     }
     const payload = { user: { id: user._id, role: user.role } };
-    const accessToken = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: "15m" });
-    res.json({ success: true, accessToken });
+    const accessToken = jwt.sign(payload, config.jwtSecret, { expiresIn: "7d" });
+    const refreshToken = jwt.sign(payload, config.jwtSecret, { expiresIn: "30d" });
+    res.json({ success: true, accessToken, refreshToken });
   } catch (err) {
     console.error("Login error:", err);
     res.status(500).json({ error: "Server error" });
   }
 });
 
-// Public: list all products
-app.get("/allproducts", async (req, res) => {
+app.get("/", (_req, res) => {
+  res.json({ name: "HSM Furniture API", health: "/health" });
+});
+
+app.get("/allproducts", async (_req, res) => {
   try {
-    const products = await Product.find({});
-    res.json(products);
+    res.json(await listProducts());
   } catch (err) {
     console.error("Error fetching all products:", err);
     res.status(500).json({ error: "Server error" });
   }
 });
 
-// Public: search with text, price, category, sort
+app.get("/product/:productId", async (req, res) => {
+  try {
+    const product = await findProduct(req.params.productId);
+    if (!product) return res.status(404).json({ error: "Product not found" });
+    res.json(product);
+  } catch (err) {
+    console.error("Product error:", err);
+    res.status(500).json({ error: "Server error" });
+  }
+});
+
+app.post("/relatedproducts", async (req, res) => {
+  try {
+    const { category } = req.body || {};
+    const related = (await listProducts({ category })).slice(0, 8);
+    res.json(related);
+  } catch (err) {
+    console.error("Related products error:", err);
+    res.status(500).json({ error: "Server error" });
+  }
+});
+
 app.get("/search", async (req, res) => {
   try {
     const { q, minPrice, maxPrice, category, sort } = req.query;
-    const filter = {};
-    if (q)         filter.$text    = { $search: q };
-    if (minPrice)  filter.price    = { ...filter.price, $gte: +minPrice };
-    if (maxPrice)  filter.price    = { ...filter.price, $lte: +maxPrice };
-    if (category)  filter.category = category;
-    let sortObj = {};
-    if (sort === "price_asc")  sortObj.price = 1;
-    if (sort === "price_desc") sortObj.price = -1;
-    if (sort === "newest")     sortObj.date  = -1;
-    const results = await Product.find(filter).sort(sortObj).limit(100);
-    res.json(results);
+    const results = await listProducts({ q, minPrice, maxPrice, category, sort });
+    res.json({
+      products: results,
+      pagination: {
+        total: results.length,
+        page: 1,
+        limit: results.length || 100,
+        totalPages: 1,
+      },
+      filters: { q, minPrice, maxPrice, category, sort },
+    });
   } catch (err) {
     console.error("Search error:", err);
     res.status(500).json({ error: "Server error" });
   }
 });
 
-// Protected: cart & checkout
-app.post("/addtocart", fetchuser, (req, res) => {
-  // original cart logic here
+attachAccountRoutes(app, { fetchuser });
+
+app.post("/addtocart", fetchuser, (_req, res) => {
   res.json({ success: true });
 });
-app.post("/removefromcart", fetchuser, (req, res) => {
-  // original remove logic here
+
+app.post("/removefromcart", fetchuser, (_req, res) => {
   res.json({ success: true });
 });
+
 app.post("/getcart", fetchuser, async (req, res) => {
-  const u = await User.findById(req.user.id);
-  res.json(u.cartData);
+  const user = await User.findById(req.user.id);
+  res.json(user.cartData);
 });
-// Protected: checkout requires auth-token
-app.post("/api/checkout", fetchuser, (req, res) => {
-  const { product_id, quantity, total_price } = req.body;
-  if (!product_id || !quantity || !total_price) {
+
+app.post("/api/checkout", optionalUser, async (req, res) => {
+  const { product_id, quantity, total_price, user_id, customer } = req.body;
+  const qty = Number(quantity);
+  const price = Number(total_price);
+
+  if (!product_id || Number.isNaN(qty) || Number.isNaN(price)) {
     return res.status(400).json({ error: "Missing fields" });
   }
-  const sql = `
-    INSERT INTO orders
-      (product_id, quantity, total_price, user_id)
-    VALUES (?, ?, ?, ?)
-  `;
-  db.query(
-    sql,
-    [product_id, quantity, total_price, req.user.id],
-    (err, result) => {
-      if (err) {
-        console.error("Checkout error:", err);
-        return res.status(500).json({ error: "Order failed" });
-      }
-      console.log("Order inserted, ID:", result.insertId);
-      res.json({ success: true, order_id: result.insertId });
-    }
-  );
+
+  try {
+    const saved = await saveOrder({
+      product_id,
+      quantity: qty,
+      total_price: price,
+      user_id: req.user?.id || user_id || null,
+      customer,
+      payment_method: "manual",
+    });
+    res.json({ success: true, order_id: saved.order_id, store: saved.store });
+  } catch (err) {
+    console.error("Checkout error:", err);
+    res.status(500).json({ error: "Order failed" });
+  }
 });
 
+async function start() {
+  await mongoose.connect(config.mongoUri);
+  console.log("Connected to MongoDB");
 
-// Start server
-app.listen(port, () => {
-  console.log(` Server running on http://localhost:${port}`);
+  const realCatalog = await catalogCount();
+  if (realCatalog === 0 && (await Product.countDocuments()) === 0) {
+    console.log("Empty catalog; seeding demo products and user");
+    await seedCatalog();
+  } else {
+    console.log(`Catalog ready: ${realCatalog} products from category collections`);
+  }
+
+  if (isMysqlConfigured()) {
+    const mysqlOk = await pingMysql();
+    if (mysqlOk) {
+      console.log("Connected to MySQL (orders)");
+    } else {
+      console.log("MySQL configured but unreachable; orders will be stored in Mongo");
+    }
+  } else {
+    console.log("MySQL not configured; orders will be stored in Mongo");
+  }
+
+  app.listen(config.port, "0.0.0.0", () => {
+    console.log(`API listening on port ${config.port}`);
+  });
+}
+
+start().catch((err) => {
+  console.error("Failed to start API:", err);
+  process.exit(1);
 });

@@ -1,83 +1,57 @@
 import React from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import ShopContextProvider from "./Context/ShopContext";
+import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import Navbar from "./Components/Navbar/Navbar";
 import Footer from "./Components/Footer/Footer";
 import ShopTabs from "./Pages/ShopTabs";
-import Shop from "./Pages/Shop";
 import ShopCategory from "./Pages/ShopCategory";
 import Product from "./Pages/Product";
 import Cart from "./Pages/Cart";
 import LoginSignup from "./Pages/LoginSignup";
 import AboutUs from "./Components/AboutUs/AboutUs";
-import tavolina_banner from "./Components/Assets/tavolina_banner.webp";
+import Wishlist from "./Pages/Wishlist";
+import UserDashboard from "./Pages/UserDashboard";
+import Orders from "./Pages/Orders";
+import OrderSuccess from "./Pages/OrderSuccess";
 import garniture_banner from "./Components/Assets/garniture_banner.png";
+import tavolina_banner from "./Components/Assets/tavolina_banner.webp";
 import dhomegjumi_banner from "./Components/Assets/dhomegjumi_banner.jpg";
-import Hero from "./Components/Hero/Hero";
-export const backend_url = "http://localhost:4001";
-export const mongodb_url = "http://localhost:4001";
-export const mysql_url = "http://localhost:5001";
-export const currency = "$";
+import { Toaster } from "react-hot-toast";
+import { backend_url, currency } from "./config";
+
+export { backend_url, currency };
+
+function categoryPage(banner, category) {
+  return <ShopCategory key={category} banner={banner} category={category} />;
+}
 
 function App() {
   return (
-    <ShopContextProvider>
-        <Router>
-          <Navbar />
-
-          <Routes>
-                <Route path="/" element={<ShopTabs />} />
-            <Route
-              path="/garniture"
-              element={
-                <ShopCategory
-                  banner={garniture_banner}
-                  category="garniture"
-                />
-              }
-            />
-
-            <Route
-              path="/tavolinebuke"
-              element={
-                <ShopCategory
-                  banner={tavolina_banner}
-                  category="tavolinebuke"
-                />
-              }
-            />
-
-            <Route
-              path="/dhomegjumi"
-              element={
-                <ShopCategory
-                  banner={dhomegjumi_banner}
-                  category="dhomegjumi"
-                />
-              }
-            />
-
-            <Route path="/product/:productId" element={<Product />} />
-
-            <Route path="/cart" element={<Cart />} />
-
-            <Route path="/login" element={<LoginSignup />} />
-
-         <Route
-           path="/about"
-           element={
-             <>
-               <Hero />
-               <AboutUs/>
-             </>
-           }
-      />
-
-          </Routes>
-<AboutUs/>
-          <Footer />
-        </Router>
-      </ShopContextProvider>
+    <Router>
+      <Navbar />
+      <Routes>
+        <Route path="/" element={<ShopTabs />} />
+        <Route path="/shop" element={<Navigate to="/" replace />} />
+        <Route path="/about" element={<AboutUs />} />
+        <Route path="/cart" element={<Cart />} />
+        <Route path="/login" element={<LoginSignup />} />
+        <Route path="/wishlist" element={<Wishlist />} />
+        <Route path="/dashboard" element={<UserDashboard />} />
+        <Route path="/orders" element={<Orders />} />
+        <Route path="/order-success" element={<OrderSuccess />} />
+        <Route path="/product/:productId" element={<Product />} />
+        <Route path="/category/garnitura" element={categoryPage(garniture_banner, "garnitura")} />
+        <Route path="/category/tavolinabuke" element={categoryPage(tavolina_banner, "tavolinabuke")} />
+        <Route path="/category/dhomagjumi" element={categoryPage(dhomegjumi_banner, "dhomagjumi")} />
+        <Route path="/category/kende" element={categoryPage(garniture_banner, "kende")} />
+        <Route path="/category/karrika" element={categoryPage(tavolina_banner, "karrika")} />
+        <Route path="/category/tavolinamesi" element={categoryPage(tavolina_banner, "tavolinamesi")} />
+        <Route path="/garniture" element={<Navigate to="/category/garnitura" replace />} />
+        <Route path="/tavolinebuke" element={<Navigate to="/category/tavolinabuke" replace />} />
+        <Route path="/dhomegjumi" element={<Navigate to="/category/dhomagjumi" replace />} />
+      </Routes>
+      <Footer />
+      <Toaster position="top-right" />
+    </Router>
   );
 }
 

@@ -1,12 +1,18 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import './index.css';
-import App from './App';
-import ShopContextProvider from './Context/ShopContext';
+import React from "react";
+import ReactDOM from "react-dom/client";
+import "./index.css";
+import App from "./App";
+import ShopContextProvider from "./Context/ShopContext";
+import { ThemeProvider } from "./Context/ThemeContext";
+import { WishlistProvider } from "./Context/WishlistContext";
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
+const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
+  <ThemeProvider>
     <ShopContextProvider>
-      <App />
+      <WishlistProvider>
+        <App />
+      </WishlistProvider>
     </ShopContextProvider>
+  </ThemeProvider>
 );

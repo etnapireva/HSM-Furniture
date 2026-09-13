@@ -1,37 +1,61 @@
 import React, { useEffect, useState } from 'react'
 import './RelatedProducts.css'
 import Item from '../Item/Item'
-import { backend_url } from '../../App';
+import { backend_url } from '../../config';
+import { cartKey } from '../../config';
 
-const RelatedProducts = ({category,id}) => {
+const RelatedProducts = ({ category, id }) => {
+  const [related, setRelated] = useState([]);
+  const currentId = id != null ? String(id) : '';
 
-  const [related,setRelated] = useState([]);
+  useEffect(() => {
+    if (!category) {
+      setRelated([]);
+      return;
+    }
 
-  useEffect(()=>{
-    fetch(`${backend_url}/relatedproducts`,{
+    fetch(`${backend_url}/relatedproducts`, {
       method: 'POST',
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({category:category}),
+      body: JSON.stringify({ category }),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        const list = Array.isArray(data) ? data : (data.products || []);
+        setRelated(list.filter((item) => cartKey(item) !== currentId).slice(0, 8));
       })
-    .then((res)=>res.json()).then((data)=>setRelated(data))
-  },[])
+      .catch((err) => {
+        console.error('Related products error:', err);
+        setRelated([]);
+      });
+  }, [category, currentId]);
+
+  if (!related.length) return null;
 
   return (
-    <div className='relatedproducts'>
-      <h1>Related Products</h1>
+    <div className="relatedproducts">
+      <h1>Produkte të ngjashme</h1>
       <hr />
       <div className="relatedproducts-item">
-        {related.map((item,index)=>{
-          if (id !== item.id) {
-            return <Item key={index} id={item.id} name={item.name} image={item.image}  new_price={item.new_price} old_price={item.old_price}/>
-          }
+        {related.map((item) => {
+          const itemId = cartKey(item);
+          return (
+            <Item
+              key={itemId}
+              id={itemId}
+              name={item.name}
+              image={item.image}
+              images={item.images}
+              price={item.price}
+            />
+          );
         })}
       </div>
     </div>
-  )
-}
+  );
+};
 
 export default RelatedProducts

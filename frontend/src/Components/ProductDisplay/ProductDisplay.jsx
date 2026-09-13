@@ -1,30 +1,43 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import "./ProductDisplay.css";
 import { ShopContext } from "../../Context/ShopContext";
-import { backend_url, currency } from "../../App";
+import { currency } from "../../config";
+import { cartKey } from "../../config";
+import ProductImage from "../ProductImage";
+import { useWishlist } from "../../Context/WishlistContext";
+import { rememberViewedProduct } from "../RecentlyViewed/RecentlyViewed";
 import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
 
 const ProductDisplay = ({ product }) => {
   const { addToCart } = useContext(ShopContext);
+  const { addToWishlist, isInWishlist } = useWishlist();
   const [qty, setQty] = useState(1);
   const navigate = useNavigate();
-  const token = localStorage.getItem("auth-token"); 
+  const token = localStorage.getItem("auth-token");
+  const id = cartKey(product);
+
+  useEffect(() => {
+    rememberViewedProduct(product);
+  }, [product, id]);
 
   const handleAddToCart = () => {
     if (!token) {
-      alert("Ju lutemi kycuni për të shtuar në shportë!");
+      toast.error("Ju lutemi kycuni për të shtuar në shportë!");
       navigate("/login");
       return;
     }
-    addToCart(product.id, qty);
+    addToCart(id, qty);
+    toast.success("Produkti u shtua në shportë.");
   };
 
   return (
     <div className="productdisplay">
       <div className="productdisplay-left">
-        <img
+        <ProductImage
           className="productdisplay-main-img"
-          src={`${backend_url}${product.image}`}
+          image={product.image}
+          images={product.images}
           alt={product.name}
         />
       </div>
@@ -32,7 +45,7 @@ const ProductDisplay = ({ product }) => {
         <h1>{product.name}</h1>
         <div className="productdisplay-right-prices">
           <span className="productdisplay-right-price-new">
-            <p>Çmimi: {product.price ? `${currency}${product.price}` : "N/A"}€</p>
+            <p>Çmimi: {product.price ? `${product.price} ${currency}` : "N/A"}</p>
           </span>
         </div>
         <p className="productdisplay-right-description">
@@ -48,6 +61,13 @@ const ProductDisplay = ({ product }) => {
           onClick={handleAddToCart} 
         >
           ADD TO CART
+        </button>
+        <button
+          className="add-to-cart-btn"
+          style={{ marginTop: 12, background: isInWishlist(id) ? "#8a7a68" : "#3b3428" }}
+          onClick={() => addToWishlist(product)}
+        >
+          {isInWishlist(id) ? "Në Wishlist" : "Shto në Wishlist"}
         </button>
       </div>
     </div>

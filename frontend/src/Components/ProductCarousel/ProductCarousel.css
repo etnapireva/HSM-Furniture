@@ -1,0 +1,76 @@
+.product-carousel {
+  position: relative;
+  margin: 8px 0 24px;
+}
+
+.product-carousel-track {
+  display: flex;
+  gap: 20px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  padding: 8px 44px 18px;
+  scrollbar-width: thin;
+  scrollbar-color: #c4b4a0 transparent;
+}
+
+.product-carousel-track::-webkit-scrollbar {
+  height: 8px;
+}
+
+.product-carousel-track::-webkit-scrollbar-thumb {
+  background: #c4b4a0;
+  border-radius: 999px;
+}
+
+.product-carousel-track > .item {
+  flex: 0 0 250px;
+  max-width: 250px;
+  scroll-snap-align: start;
+}
+
+.carousel-btn {
+  position: absolute;
+  top: 42%;
+  transform: translateY(-50%);
+  z-index: 2;
+  width: 42px;
+  height: 42px;
+  border: 0;
+  border-radius: 50%;
+  background: #3b3428;
+  color: #fffaf3;
+  font-size: 28px;
+  line-height: 1;
+  cursor: pointer;
+  box-shadow: 0 8px 18px rgba(59, 52, 40, 0.22);
+}
+
+.carousel-btn:hover {
+  background: #2b251c;
+}
+
+.carousel-btn.prev {
+  left: 0;
+}
+
+.carousel-btn.next {
+  right: 0;
+}
+
+@media (max-width: 640px) {
+  .product-carousel-track {
+    padding: 8px 36px 16px;
+  }
+
+  .product-carousel-track > .item {
+    flex-basis: 210px;
+    max-width: 210px;
+  }
+
+  .carousel-btn {
+    width: 36px;
+    height: 36px;
+    font-size: 24px;
+  }
+}

@@ -1,10 +1,77 @@
+:root,
+[data-theme="light"] {
+  --bg-primary: #fbf7f1;
+  --bg-secondary: #fffdf9;
+  --bg-tertiary: #f0e8dc;
+  --text-primary: #2a241c;
+  --text-secondary: #3d342b;
+  --text-muted: #7a6e62;
+  --accent-primary: #8d7358;
+  --accent-secondary: #6b5643;
+  --border-primary: #e6dccf;
+  --border-secondary: #d8ccbb;
+  --border-light: #efe7db;
+  --shadow-light: rgba(60, 44, 28, 0.08);
+  --shadow-medium: rgba(60, 44, 28, 0.14);
+  --shadow-heavy: rgba(0, 0, 0, 0.28);
+  --hero-overlay: linear-gradient(180deg, rgba(20, 16, 12, 0.12) 0%, rgba(20, 16, 12, 0.55) 100%);
+  --hero-text: #fff;
+  --hero-content-bg: transparent;
+}
+
+[data-theme="dark"] {
+  --bg-primary: #1c1916;
+  --bg-secondary: #2a241f;
+  --bg-tertiary: #3a322b;
+  --text-primary: #f6efe6;
+  --text-secondary: #f3ece3;
+  --text-muted: #c4b8aa;
+  --accent-primary: #c4a574;
+  --accent-secondary: #a8885c;
+  --border-primary: #4a4036;
+  --border-secondary: #5a4e42;
+  --border-light: #3a322b;
+  --shadow-light: rgba(0, 0, 0, 0.25);
+  --shadow-medium: rgba(0, 0, 0, 0.35);
+  --shadow-heavy: rgba(0, 0, 0, 0.45);
+  --hero-overlay: linear-gradient(180deg, rgba(0, 0, 0, 0.25) 0%, rgba(0, 0, 0, 0.62) 100%);
+  --hero-text: #fff;
+  --hero-content-bg: transparent;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
 * {
   margin: 0;
   padding: 0;
-  font-family: 'poppins';
+}
+
+html,
+body {
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  font-family: "Poppins", "Segoe UI", sans-serif;
+  font-weight: 400;
+  line-height: 1.5;
+}
+
+img {
+  max-width: 100%;
+  display: block;
 }
 
 a {
   text-decoration: none !important;
   color: inherit;
+}
+
+button,
+input,
+select,
+textarea {
+  font-family: inherit;
 }

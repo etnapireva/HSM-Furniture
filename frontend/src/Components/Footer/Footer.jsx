@@ -6,8 +6,6 @@ import instagram_icon from '../Assets/instagram_icon.png'
 import whatsapp_icon from '../Assets/whatsapp_icon.png'
 import location_logo from '../Assets/location_logo.png'
 
-import { Link } from 'react-router-dom'
-
 const Footer = () => {
   return (
     <div className='footer'>

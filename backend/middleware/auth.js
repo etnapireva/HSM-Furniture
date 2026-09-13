@@ -1,7 +1,10 @@
 const jwt = require("jsonwebtoken");
 require("dotenv").config();
 
-const JWT_SECRET = process.env.JWT_SECRET || "your_secret_key";
+const JWT_SECRET = process.env.JWT_SECRET;
+if (!JWT_SECRET) {
+  throw new Error("Missing required env var: JWT_SECRET");
+}
 
 const auth = (req, res, next) => {
   const token = req.header("Authorization")?.replace("Bearer ", "");

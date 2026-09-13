@@ -1,7 +1,8 @@
 // src/api.js
 import axios from "axios";
+import { backend_url } from "./config";
 
 export default axios.create({
-  baseURL: "http://localhost:4001",
+  baseURL: backend_url,
   withCredentials: true,
 });
