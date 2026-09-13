@@ -9,14 +9,20 @@ export function cartKey(productOrId) {
 }
 
 export function imageUrl(image) {
-  const first = Array.isArray(image) ? image[0] : image;
-  if (!first) return "";
-  if (/^https?:\/\//i.test(first)) return first;
-  const path = String(first).startsWith("/") ? first : `/${first}`;
-  return `${backend_url}${path}`;
+  return imageCandidates(image)[0] || "";
 }
 
 export function imageCandidates(image) {
   const list = (Array.isArray(image) ? image : [image]).filter(Boolean);
-  return [...new Set(list.map((item) => imageUrl(item)).filter(Boolean))];
+  const urls = [];
+  for (const item of list) {
+    if (/^https?:\/\//i.test(String(item))) {
+      urls.push(item);
+      continue;
+    }
+    const imagePath = String(item).startsWith("/") ? String(item) : `/${item}`;
+    urls.push(imagePath);
+    urls.push(`${backend_url}${imagePath}`);
+  }
+  return [...new Set(urls.filter(Boolean))];
 }
