@@ -1,4 +1,11 @@
-export const backend_url = process.env.REACT_APP_API_URL || "http://localhost:4001";
+const LIVE_API = "https://hsm-furniture.onrender.com";
+const envApi = (process.env.REACT_APP_API_URL || "").replace(/\/$/, "");
+const isLocalHost = typeof window !== "undefined"
+  && /^(localhost|127\.0\.0\.1)$/.test(window.location.hostname);
+
+export const backend_url = (!envApi || (envApi.includes("localhost") && !isLocalHost))
+  ? (isLocalHost ? "http://localhost:4001" : LIVE_API)
+  : envApi;
 export const currency = "€";
 
 export function cartKey(productOrId) {

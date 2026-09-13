@@ -15,11 +15,21 @@ const app = express();
 
 app.use(express.json());
 
+function isAllowedOrigin(origin) {
+  if (!origin) return true;
+  if (config.corsOrigins.includes(origin)) return true;
+  if (/^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/.test(origin)) return true;
+  try {
+    const host = new URL(origin).hostname;
+    return host.endsWith(".vercel.app") || host.endsWith(".onrender.com");
+  } catch {
+    return false;
+  }
+}
+
 app.use(cors({
   origin(origin, callback) {
-    if (!origin || config.corsOrigins.includes(origin) || /^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/.test(origin)) {
-      return callback(null, true);
-    }
+    if (isAllowedOrigin(origin)) return callback(null, true);
     return callback(null, false);
   },
   methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
