@@ -48,9 +48,6 @@
 * {
   margin: 0;
   padding: 0;
-  /* Prevent flex/grid children from overflowing */
-  min-width: 0;
-  min-height: 0;
 }
 
 html {
@@ -65,8 +62,7 @@ body,
   width: 100%;
   max-width: 100%;
   min-width: 0;
-  overflow-x: hidden; /* Fallback for older Safari */
-  overflow-x: clip; /* Modern browsers */
+  overflow-x: clip;
 }
 
 html,
