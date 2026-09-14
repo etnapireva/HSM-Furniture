@@ -1,6 +1,9 @@
 .product-carousel {
   position: relative;
   margin: 8px 0 24px;
+  width: 100%;
+  max-width: 100%;
+  overflow: hidden;
 }
 
 .product-carousel-track {
@@ -66,8 +69,8 @@
   }
 
   .product-carousel-track > .item {
-    flex-basis: min(72vw, 240px);
-    max-width: min(72vw, 240px);
+    flex-basis: 75%;
+    max-width: 75%;
   }
 
   .carousel-btn {

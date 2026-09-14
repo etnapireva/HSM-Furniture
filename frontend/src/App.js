@@ -50,7 +50,7 @@ function App() {
         <Route path="/dhomegjumi" element={<Navigate to="/category/dhomagjumi" replace />} />
       </Routes>
       <Footer />
-      <Toaster position="top-center" toastOptions={{ style: { maxWidth: "90vw" } }} />
+      <Toaster position="top-center" toastOptions={{ style: { maxWidth: "min(360px, 92%)" } }} />
     </Router>
   );
 }

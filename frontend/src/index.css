@@ -50,10 +50,17 @@
   padding: 0;
 }
 
+html {
+  background-color: #fbf7f1;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
 html,
 body {
   width: 100%;
   min-width: 0;
+  position: relative;
   background: var(--bg-primary);
   color: var(--text-primary);
   font-family: "Poppins", "Segoe UI", sans-serif;
@@ -73,6 +80,7 @@ body,
   width: 100%;
   min-height: 100%;
   overflow-x: hidden;
+  position: relative;
 }
 
 .nav,
@@ -90,7 +98,9 @@ body.nav-open {
 
 img,
 iframe,
-video {
+video,
+canvas,
+svg {
   max-width: 100%;
 }
 
@@ -113,6 +123,15 @@ select,
 textarea {
   font-family: inherit;
   font-size: 16px;
+}
+
+@media (max-width: 900px) {
+  html,
+  body,
+  #root {
+    overflow-x: hidden;
+    max-width: 100%;
+  }
 }
 
 @media (max-width: 768px) {
