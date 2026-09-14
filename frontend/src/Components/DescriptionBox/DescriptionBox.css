@@ -39,3 +39,21 @@
         font-size: 14px;
     }
 }
+
+@media (max-width: 800px) {
+  .descriptionbox {
+    margin: 28px 16px 40px;
+  }
+
+  .descriptionbox-nav-box {
+    width: auto;
+    flex: 1;
+    height: 48px;
+    font-size: 14px;
+  }
+
+  .descriptionbox-description {
+    padding: 20px 16px 28px;
+    gap: 16px;
+  }
+}

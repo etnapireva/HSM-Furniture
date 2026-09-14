@@ -48,3 +48,23 @@
     grid-template-columns: 1fr 1fr;
   }
 }
+
+@media (max-width: 640px) {
+  .advanced-search {
+    padding: 1rem;
+    margin: 1rem 0;
+    border-radius: 14px;
+  }
+
+  .advanced-search-row {
+    grid-template-columns: 1fr;
+  }
+
+  .advanced-search-actions {
+    flex-direction: column;
+  }
+
+  .advanced-search button {
+    width: 100%;
+  }
+}

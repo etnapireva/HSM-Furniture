@@ -60,17 +60,17 @@
 
 @media (max-width: 640px) {
   .product-carousel-track {
-    padding: 8px 36px 16px;
+    padding: 8px 12px 16px;
+    gap: 12px;
+    -webkit-overflow-scrolling: touch;
   }
 
   .product-carousel-track > .item {
-    flex-basis: 210px;
-    max-width: 210px;
+    flex-basis: min(72vw, 240px);
+    max-width: min(72vw, 240px);
   }
 
   .carousel-btn {
-    width: 36px;
-    height: 36px;
-    font-size: 24px;
+    display: none;
   }
 }

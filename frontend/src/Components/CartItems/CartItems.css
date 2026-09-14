@@ -270,13 +270,33 @@ hr {
 }
 
 @media (max-width: 800px) {
-  .cartitems-format-main,
+  .cartitems-format-main:not(.cartitems-format) {
+    display: none;
+  }
+
   .cartitems-format {
-    grid-template-columns: 56px 1.2fr 0.8fr 0.8fr 0.8fr 32px;
+    display: grid;
+    grid-template-columns: 72px 1fr 32px;
+    grid-template-areas:
+      "img title remove"
+      "img price remove"
+      "img qty total";
+    text-align: left;
   }
+
+  .cartitems-format img.cartitems-product-icon { grid-area: img; }
+  .cartitems-product-title { grid-area: title; padding-left: 0; }
+  .cartitems-format p:nth-child(3) { grid-area: price; text-align: left; }
+  .cartitems-format button.cartitems-quantity,
+  .cartitems-format p:nth-child(4) { grid-area: qty; text-align: left; }
+  .cartitems-format p:nth-child(5) { grid-area: total; text-align: left; }
+  .cartitems-remove-icon { grid-area: remove; }
+
   .cartitems-product-icon {
-    width: 56px;
-    height: 56px;
+    width: 72px;
+    height: 72px;
   }
-  .cartitems-total { width: 100%; }
+  .cartitems-total { width: 100%; position: static; }
+  .cartitems-down { justify-content: stretch; }
+  .cartitems-promocode { margin-left: 0; width: 100%; }
 }

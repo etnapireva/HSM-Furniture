@@ -80,3 +80,18 @@
 .loginsignup-agree input {
   margin-right: 0.5rem;
 }
+
+@media (max-width: 480px) {
+  .loginsignup {
+    padding: 24px 12px;
+    align-items: flex-start;
+  }
+
+  .loginsignup-container {
+    padding: 1.25rem;
+  }
+
+  .loginsignup-container h1 {
+    font-size: 1.4rem;
+  }
+}

@@ -280,9 +280,13 @@
 }
 
 @media (max-width: 768px) {
+  .order-success {
+    padding: 16px 12px;
+  }
+
   .success-container {
-    padding: 30px 20px;
-    margin: 20px;
+    padding: 24px 16px;
+    margin: 0;
   }
   
   .success-header h1 {

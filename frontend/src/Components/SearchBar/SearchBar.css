@@ -60,3 +60,19 @@
   background-color: #d2c4b2;
   transform: translateY(-1px);
 }
+
+@media (max-width: 640px) {
+  .search-bar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .search-bar input[type="text"],
+  .search-bar input[type="number"],
+  .search-bar select,
+  .search-bar button {
+    width: 100%;
+    min-width: 0;
+    flex: 1 1 auto;
+  }
+}

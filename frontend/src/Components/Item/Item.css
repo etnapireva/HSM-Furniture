@@ -52,4 +52,15 @@
   .item {
     max-width: none;
   }
+
+  .item p {
+    font-size: 14px;
+    margin: 10px 10px 4px;
+  }
+}
+
+@media (hover: none) {
+  .item:hover {
+    transform: none;
+  }
 }

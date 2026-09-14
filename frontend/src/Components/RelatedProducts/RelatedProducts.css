@@ -28,13 +28,28 @@
 
 
 @media(max-width:600px){
-   
+    .relatedproducts {
+        padding: 10px 12px 48px;
+    }
+
     .relatedproducts h1{
-        font-size: 30px;
+        font-size: 22px;
+        text-align: center;
     }
     .relatedproducts hr{
         width: 100px;
         height: 4px;
-        
+    }
+    .relatedproducts-item {
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        justify-content: flex-start;
+        gap: 12px;
+        padding: 0 4px 12px;
+        -webkit-overflow-scrolling: touch;
+    }
+    .relatedproducts-item .item {
+        flex: 0 0 210px;
+        max-width: 210px;
     }
 }
