@@ -1,5 +1,6 @@
 /* Modern Sleek Slideshow Hero */
 .hero {
+  width: 100%;
   min-height: 78vh;
   position: relative;
   overflow: hidden;
@@ -274,32 +275,48 @@
 }
 
 @media (max-width: 900px) {
+  .hero,
+  .hero-slideshow {
+    width: 100%;
+    min-height: 0;
+    height: 70vh;
+    max-height: 560px;
+  }
+
   .slide-content {
-    padding: 0 1.5rem;
+    padding: 56px 16px 24px;
+    max-width: 100%;
   }
   
   .slide-title {
-    font-size: 2rem;
+    font-size: 1.8rem;
   }
   
   .slide-description {
     font-size: 0.95rem;
-    margin-bottom: 30px;
+    margin-bottom: 18px;
   }
-  
+
   .slide-actions {
-    flex-wrap: wrap;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+  }
+
+  .slide-btn-primary,
+  .slide-btn-secondary {
+    width: 100%;
+    justify-content: center;
   }
   
   .slideshow-controls {
-    top: 16px;
+    top: auto;
+    bottom: 12px;
     gap: 12px;
   }
   
   .nav-btn {
-    width: 45px;
-    height: 45px;
-    font-size: 20px;
+    display: none;
   }
 }
 
