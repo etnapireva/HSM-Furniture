@@ -6,6 +6,7 @@
   max-width: 100%;
   min-width: 0;
   box-sizing: border-box;
+  overflow: hidden;
   background: var(--bg-secondary, #f6f1ea);
   border: 1px solid var(--border-primary, #e6dccf);
   border-radius: 16px;
@@ -89,6 +90,7 @@
 .advanced-search-prices,
 .advanced-search-actions {
   display: flex;
+  flex-wrap: wrap;
   gap: 8px;
   width: 100%;
 }
@@ -121,4 +123,17 @@
 .advanced-search button[type="button"]:not(.advanced-search-toggle) {
   background: var(--bg-tertiary, #e8dfd4);
   color: var(--text-primary, #2a241c);
+}
+
+@media (max-width: 640px) {
+  .advanced-search-prices,
+  .advanced-search-actions {
+    flex-direction: column;
+  }
+
+  .advanced-search-prices > *,
+  .advanced-search-actions > * {
+    flex: 1 1 auto;
+    width: 100%;
+  }
 }
