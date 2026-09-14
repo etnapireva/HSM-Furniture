@@ -45,7 +45,8 @@ export default function AdvancedSearchBar({ onSearch, onClear }) {
       <label className="advanced-search-field advanced-search-query">
         <span>Kërko</span>
         <input
-          type="search"
+          type="text"
+          autoComplete="off"
           placeholder="Kërko mobilje..."
           value={q}
           onChange={(e) => setQ(e.target.value)}

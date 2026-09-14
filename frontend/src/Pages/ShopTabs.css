@@ -7,9 +7,12 @@
 
 /* vetëm kjo pjesë kufizohet në qendër */
 .shop-tabs-container {
+  width: 100%;
   max-width: 1200px;
   margin: 0 auto;
   padding: 1rem;
+  overflow-x: hidden;
+  box-sizing: border-box;
 }
 
 @media (max-width: 640px) {
