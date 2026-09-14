@@ -122,26 +122,3 @@
   background: var(--bg-tertiary, #e8dfd4);
   color: var(--text-primary, #2a241c);
 }
-
-@media (min-width: 900px) {
-  .advanced-search-toggle {
-    display: none;
-  }
-
-  .advanced-search-filters,
-  .advanced-search-filters.open {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    align-items: flex-end;
-  }
-
-  .advanced-search-filters > .advanced-search-field,
-  .advanced-search-filters > .advanced-search-prices {
-    flex: 1 1 160px;
-  }
-
-  .advanced-search-actions {
-    max-width: 320px;
-  }
-}

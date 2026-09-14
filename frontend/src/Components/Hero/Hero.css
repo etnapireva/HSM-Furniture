@@ -1,6 +1,7 @@
 /* Modern Sleek Slideshow Hero */
 .hero {
   width: 100%;
+  min-width: 100%;
   min-height: 78vh;
   position: relative;
   overflow: hidden;

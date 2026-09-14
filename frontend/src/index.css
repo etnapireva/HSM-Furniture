@@ -57,29 +57,27 @@ html {
 }
 
 html,
-body {
+body,
+#root {
   width: 100%;
-  min-width: 0;
+  min-width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+html,
+body {
   position: relative;
   background: var(--bg-primary);
   color: var(--text-primary);
   font-family: "Poppins", "Segoe UI", sans-serif;
   font-weight: 400;
   line-height: 1.5;
-  overflow-x: hidden;
-}
-
-html,
-body,
-#root {
-  max-width: 100%;
 }
 
 #root {
   display: block;
-  width: 100%;
   min-height: 100%;
-  overflow-x: hidden;
   position: relative;
 }
 
@@ -123,18 +121,6 @@ select,
 textarea {
   font-family: inherit;
   font-size: 16px;
-}
-
-@media (max-width: 1024px) {
-  html,
-  body,
-  #root,
-  .shop-tabs-page,
-  .shop-tabs-container,
-  .advanced-search {
-    overflow-x: hidden;
-    max-width: 100%;
-  }
 }
 
 @media (max-width: 768px) {
