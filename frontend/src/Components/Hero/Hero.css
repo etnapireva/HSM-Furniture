@@ -1,14 +1,21 @@
 /* Modern Sleek Slideshow Hero */
 .hero,
 .hero-slideshow,
-.slide-container {
+.slide-container,
+.slide-overlay {
   width: 100%;
+  max-width: 100%;
 }
 
 .hero {
   min-height: 78vh;
   position: relative;
   overflow: hidden;
+  background: #1c1916;
+  width: 100vw;
+  max-width: 100vw;
+  margin-left: calc(50% - 50vw);
+  margin-right: calc(50% - 50vw);
 }
 
 .hero-slideshow {
@@ -23,10 +30,14 @@
   overflow: hidden;
 }
 
-.slide-image {
+.hero .slide-image {
   width: 100%;
+  max-width: none;
+  min-width: 100%;
+  min-height: 100%;
   height: 100%;
   object-fit: cover;
+  object-position: center;
   display: block;
   transition: opacity 0.8s ease-in-out;
 }
@@ -281,7 +292,8 @@
 @media (max-width: 900px) {
   .hero,
   .hero-slideshow {
-    width: 100%;
+    width: 100vw;
+    max-width: 100vw;
     min-height: 0;
     height: 70vh;
     max-height: 560px;

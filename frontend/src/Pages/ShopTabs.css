@@ -1,25 +1,61 @@
 /* src/Pages/ShopTabs.css */
 
-/* wrapper i përgjithshëm, pa max-width që të mos kufizojë Hero-n */
 .shop-tabs-page {
   display: block;
   width: 100%;
-  overflow-x: hidden;
+  max-width: 100%;
+  overflow-x: clip;
 }
 
-/* vetëm kjo pjesë kufizohet në qendër */
 .shop-tabs-container {
   width: 100%;
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 1rem;
-  overflow-x: hidden;
+  max-width: none;
+  margin: 0;
+  padding: 16px;
+  overflow-x: clip;
   box-sizing: border-box;
+}
+
+.shop-tabs-page .shopcategory-products {
+  width: 100%;
+  max-width: none;
+  margin: 16px 0 32px;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 260px), 1fr));
+  justify-items: stretch;
+}
+
+.shop-tabs-page .item {
+  width: 100%;
+  max-width: none;
+}
+
+.shop-tabs-page .recently-viewed {
+  max-width: none;
+  width: 100%;
+  margin: 40px 0;
+}
+
+.shop-tabs-page .about-us,
+.shop-tabs-page .about-map,
+.shop-tabs-page .about-hours {
+  max-width: none;
+  width: 100%;
+  margin: 2.5rem 0;
+  padding: 0 16px;
+  box-sizing: border-box;
+}
+
+@media (max-width: 768px) {
+  .shop-tabs-page .shopcategory-products {
+    width: 100%;
+    margin: 12px 0 24px;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
 }
 
 @media (max-width: 640px) {
   .shop-tabs-container {
-    padding: 0.75rem;
+    padding: 12px;
   }
 
   .about-us,

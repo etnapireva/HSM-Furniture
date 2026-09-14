@@ -120,7 +120,7 @@ export default function ShopTabs() {
       <Hero />
 
       {/* 2) Këtu fillon zona e Search + Grid */}
-      <div className="shop-tabs-container products-section">
+      <div className="shop-tabs-container">
         <AdvancedSearchBar onSearch={handleSearch} onClear={handleClear} />
 
         {/* Search Results Info */}
