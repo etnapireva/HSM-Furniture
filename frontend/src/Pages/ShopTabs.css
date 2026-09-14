@@ -9,10 +9,6 @@
 }
 
 .shop-tabs-container {
-  width: 100%;
-  max-width: 1200px;
-  min-width: 0;
-  margin: 0 auto;
   padding: 16px;
   box-sizing: border-box;
 }
