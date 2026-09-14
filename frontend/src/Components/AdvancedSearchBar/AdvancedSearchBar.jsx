@@ -17,6 +17,7 @@ export default function AdvancedSearchBar({ onSearch, onClear }) {
   const [minPrice, setMinPrice] = useState("");
   const [maxPrice, setMaxPrice] = useState("");
   const [sort, setSort] = useState("relevance");
+  const [filtersOpen, setFiltersOpen] = useState(false);
 
   useEffect(() => {
     onSearch?.({});
@@ -41,37 +42,70 @@ export default function AdvancedSearchBar({ onSearch, onClear }) {
 
   return (
     <form className="advanced-search" onSubmit={handleSearch}>
-      <div className="advanced-search-row">
+      <label className="advanced-search-field advanced-search-query">
+        <span>Kërko</span>
         <input
-          type="text"
+          type="search"
           placeholder="Kërko mobilje..."
           value={q}
           onChange={(e) => setQ(e.target.value)}
+          enterKeyHint="search"
         />
-        <select value={category} onChange={(e) => setCategory(e.target.value)}>
-          {CATEGORIES.map((item) => (
-            <option key={item.value} value={item.value}>{item.label}</option>
-          ))}
-        </select>
-        <input
-          type="number"
-          placeholder="Çmimi min"
-          value={minPrice}
-          onChange={(e) => setMinPrice(e.target.value)}
-        />
-        <input
-          type="number"
-          placeholder="Çmimi max"
-          value={maxPrice}
-          onChange={(e) => setMaxPrice(e.target.value)}
-        />
-        <select value={sort} onChange={(e) => setSort(e.target.value)}>
-          <option value="relevance">Relevanca</option>
-          <option value="newest">Më të rejat</option>
-          <option value="price_asc">Çmimi ↑</option>
-          <option value="price_desc">Çmimi ↓</option>
-        </select>
+      </label>
+
+      <button
+        type="button"
+        className={`advanced-search-toggle${filtersOpen ? " open" : ""}`}
+        aria-expanded={filtersOpen}
+        onClick={() => setFiltersOpen((open) => !open)}
+      >
+        {filtersOpen ? "Fshih filtrat" : "Filtra"}
+      </button>
+
+      <div className={`advanced-search-filters${filtersOpen ? " open" : ""}`}>
+        <label className="advanced-search-field">
+          <span>Kategoria</span>
+          <select value={category} onChange={(e) => setCategory(e.target.value)}>
+            {CATEGORIES.map((item) => (
+              <option key={item.value} value={item.value}>{item.label}</option>
+            ))}
+          </select>
+        </label>
+
+        <div className="advanced-search-prices">
+          <label className="advanced-search-field">
+            <span>Çmimi min</span>
+            <input
+              type="number"
+              inputMode="numeric"
+              placeholder="0"
+              value={minPrice}
+              onChange={(e) => setMinPrice(e.target.value)}
+            />
+          </label>
+          <label className="advanced-search-field">
+            <span>Çmimi max</span>
+            <input
+              type="number"
+              inputMode="numeric"
+              placeholder="9999"
+              value={maxPrice}
+              onChange={(e) => setMaxPrice(e.target.value)}
+            />
+          </label>
+        </div>
+
+        <label className="advanced-search-field">
+          <span>Rendit</span>
+          <select value={sort} onChange={(e) => setSort(e.target.value)}>
+            <option value="relevance">Relevanca</option>
+            <option value="newest">Më të rejat</option>
+            <option value="price_asc">Çmimi ↑</option>
+            <option value="price_desc">Çmimi ↓</option>
+          </select>
+        </label>
       </div>
+
       <div className="advanced-search-actions">
         <button type="submit">Kërko</button>
         <button type="button" onClick={handleClear}>Pastro</button>
