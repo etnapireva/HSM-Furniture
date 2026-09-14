@@ -3,6 +3,9 @@
 /* wrapper i përgjithshëm, pa max-width që të mos kufizojë Hero-n */
 .shop-tabs-page {
   width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  overflow-x: hidden;
 }
 
 /* vetëm kjo pjesë kufizohet në qendër */
