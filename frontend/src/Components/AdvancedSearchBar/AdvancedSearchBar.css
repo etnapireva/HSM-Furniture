@@ -7,11 +7,14 @@
   min-width: 0;
   box-sizing: border-box;
   overflow: hidden;
+  overflow: clip; /* Better Safari support */
   background: var(--bg-secondary, #f6f1ea);
   border: 1px solid var(--border-primary, #e6dccf);
   border-radius: 16px;
   padding: 12px;
   margin: 1rem 0 1.5rem;
+  /* Safari containment */
+  contain: layout style;
 }
 
 .advanced-search-field,

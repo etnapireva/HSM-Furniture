@@ -4,7 +4,10 @@
   max-width: 100%;
   min-width: 0;
   overflow: hidden;
+  overflow: clip; /* Better Safari support */
   margin: 8px 0 24px;
+  /* Safari containment */
+  contain: layout style;
 }
 
 .product-carousel-track {
