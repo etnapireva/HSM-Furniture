@@ -2,10 +2,11 @@
 import React, { useState, useEffect, useRef } from "react";
 import Hero from "../Components/Hero/Hero";
 import AdvancedSearchBar from "../Components/AdvancedSearchBar/AdvancedSearchBar";
-import ProductCarousel from "../Components/ProductCarousel/ProductCarousel";
+import Item from "../Components/Item/Item";
 import RecentlyViewed from "../Components/RecentlyViewed/RecentlyViewed";
 import { backend_url } from "../config";
 import "./ShopTabs.css";
+import "./CSS/ShopCategory.css";
 import locationIcon from "../Components/Assets/location_logo.png";
 import heroImg from "../Components/Assets/hero_image.jpg";
 
@@ -119,7 +120,7 @@ export default function ShopTabs() {
       <Hero />
 
       {/* 2) Këtu fillon zona e Search + Grid */}
-      <div className="shop-tabs-container">
+      <div className="shop-tabs-container products-section">
         <AdvancedSearchBar onSearch={handleSearch} onClear={handleClear} />
 
         {/* Search Results Info */}
@@ -155,7 +156,18 @@ export default function ShopTabs() {
         )}
 
         {!loading && !error && products.length > 0 && (
-          <ProductCarousel products={products} />
+          <div className="shopcategory-products">
+            {products.map((p) => (
+              <Item
+                key={p._id || p.id}
+                id={p.id || p._id}
+                name={p.name}
+                image={p.image}
+                images={p.images}
+                price={p.price}
+              />
+            ))}
+          </div>
         )}
 
         {/* No Results Message for Search */}
