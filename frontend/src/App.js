@@ -17,6 +17,7 @@ import tavolina_banner from "./Components/Assets/tavolina_banner.webp";
 import dhomegjumi_banner from "./Components/Assets/dhomegjumi_banner.jpg";
 import { Toaster } from "react-hot-toast";
 import { backend_url, currency } from "./config";
+import { Analytics } from "@vercel/analytics/react";
 
 export { backend_url, currency };
 
@@ -51,6 +52,7 @@ function App() {
       </Routes>
       <Footer />
       <Toaster position="top-center" toastOptions={{ style: { maxWidth: "min(360px, 92%)" } }} />
+      <Analytics />
     </Router>
   );
 }
