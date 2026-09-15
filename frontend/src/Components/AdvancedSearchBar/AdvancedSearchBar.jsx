@@ -99,10 +99,13 @@ export default function AdvancedSearchBar({ onSearch, onClear }) {
         <label className="advanced-search-field">
           <span>Rendit</span>
           <select value={sort} onChange={(e) => setSort(e.target.value)}>
-            <option value="relevance">Relevanca</option>
+            <option value="relevance">Rekomanduar</option>
             <option value="newest">Më të rejat</option>
-            <option value="price_asc">Çmimi ↑</option>
-            <option value="price_desc">Çmimi ↓</option>
+            <option value="price_asc">Çmimi: Ulët → Lartë</option>
+            <option value="price_desc">Çmimi: Lartë → Ulët</option>
+            <option value="name_asc">Emri: A → Z</option>
+            <option value="name_desc">Emri: Z → A</option>
+            <option value="best_selling">Më të shitura</option>
           </select>
         </label>
       </div>

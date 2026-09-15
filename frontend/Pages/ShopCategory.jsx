@@ -7,9 +7,19 @@ import { backend_url } from "../App";
 import locationIcon from "../Components/Assets/location_logo.png";
 import heroImg from "../Components/Assets/hero_image.jpg";
 
+const SORT_OPTIONS = [
+  { value: "", label: "Rekomanduar", icon: "★" },
+  { value: "newest", label: "Më të rejat", icon: "🆕" },
+  { value: "price_asc", label: "Çmimi: Ulët → Lartë", icon: "↑" },
+  { value: "price_desc", label: "Çmimi: Lartë → Ulët", icon: "↓" },
+  { value: "name_asc", label: "Emri: A → Z", icon: "A" },
+  { value: "name_desc", label: "Emri: Z → A", icon: "Z" },
+  { value: "best_selling", label: "Më të shitura", icon: "🔥" },
+];
+
 export default function ShopCategory({ banner, category }) {
   const [products, setProducts]     = useState([]);
-  const [sortOrder, setSortOrder]   = useState(""); // "", "price_asc", "price_desc"
+  const [sortOrder, setSortOrder]   = useState(""); // default = "Rekomanduar"
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -109,17 +119,30 @@ export default function ShopCategory({ banner, category }) {
       <div className="products-section">
         <div className="products-header">
           <h3>Produktet tona</h3>
-          <div className="shopcategory-sort-card">
-            <span className="sort-label">Sort by price</span>
-            <select
-              className="sort-select"
-              value={sortOrder}
-              onChange={(e) => setSortOrder(e.target.value)}
-            >
-              <option value="">Default</option>
-              <option value="price_asc">Low → High</option>
-              <option value="price_desc">High → Low</option>
-            </select>
+          <div className="sort-control">
+            <label className="sort-control-label" htmlFor="sort-select">
+              <svg className="sort-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <path d="M3 6h18M6 12h12M9 18h6" strokeLinecap="round"/>
+              </svg>
+              <span>Rendit sipas:</span>
+            </label>
+            <div className="sort-select-wrapper">
+              <select
+                id="sort-select"
+                className="sort-select"
+                value={sortOrder}
+                onChange={(e) => setSortOrder(e.target.value)}
+              >
+                {SORT_OPTIONS.map((option) => (
+                  <option key={option.value} value={option.value}>
+                    {option.label}
+                  </option>
+                ))}
+              </select>
+              <svg className="sort-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <path d="M6 9l6 6 6-6" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
+            </div>
           </div>
         </div>
 

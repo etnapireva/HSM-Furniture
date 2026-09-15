@@ -89,13 +89,38 @@ function applyFilters(products, { q, minPrice, maxPrice } = {}) {
   });
 }
 
-function sortProducts(products, sort) {
+function sortProducts(products, sort, salesData = {}) {
   const next = [...products];
-  if (sort === "price_asc") next.sort((a, b) => (a.price || 0) - (b.price || 0));
-  if (sort === "price_desc") next.sort((a, b) => (b.price || 0) - (a.price || 0));
-  if (sort === "newest") {
-    next.sort((a, b) => new Date(b.date || b.lastUpdated || 0) - new Date(a.date || a.lastUpdated || 0));
+  
+  switch (sort) {
+    case "price_asc":
+      next.sort((a, b) => (a.price || 0) - (b.price || 0));
+      break;
+    case "price_desc":
+      next.sort((a, b) => (b.price || 0) - (a.price || 0));
+      break;
+    case "newest":
+      next.sort((a, b) => new Date(b.date || b.lastUpdated || 0) - new Date(a.date || a.lastUpdated || 0));
+      break;
+    case "name_asc":
+      next.sort((a, b) => (a.name || "").localeCompare(b.name || "", "sq"));
+      break;
+    case "name_desc":
+      next.sort((a, b) => (b.name || "").localeCompare(a.name || "", "sq"));
+      break;
+    case "best_selling":
+      // Sort by total quantity sold (from salesData)
+      next.sort((a, b) => {
+        const idA = String(a._id || a.id);
+        const idB = String(b._id || b.id);
+        return (salesData[idB] || 0) - (salesData[idA] || 0);
+      });
+      break;
+    default:
+      // "relevance" or empty - keep original order
+      break;
   }
+  
   return next;
 }
 
@@ -106,8 +131,34 @@ async function listProducts(query = {}) {
     ? await listFromCategoryCollections({ category })
     : (await Product.find(category ? { category } : {}).lean()).map((doc) => normalize(doc, doc.category));
 
-  products = sortProducts(applyFilters(products, query), query.sort);
+  // Get sales data if sorting by best_selling
+  let salesData = {};
+  if (query.sort === "best_selling") {
+    salesData = await getSalesData();
+  }
+
+  products = sortProducts(applyFilters(products, query), query.sort, salesData);
   return products;
+}
+
+// Get aggregated sales data from orders
+async function getSalesData() {
+  try {
+    const { Order } = require("./models");
+    const orders = await Order.find({ status: { $ne: "cancelled" } }).lean();
+    const salesData = {};
+    
+    for (const order of orders) {
+      const productId = String(order.product_id);
+      const quantity = order.quantity || 1;
+      salesData[productId] = (salesData[productId] || 0) + quantity;
+    }
+    
+    return salesData;
+  } catch (err) {
+    console.error("Error fetching sales data:", err);
+    return {};
+  }
 }
 
 async function findProduct(productId) {
