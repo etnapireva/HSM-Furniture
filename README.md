@@ -2,7 +2,7 @@
 
 Full-stack furniture shop: React storefront, Express API, MongoDB products/users, optional MySQL orders.''
 
-Live shop: https://hsm-furniture-epmo-cucw3mkbs-etnas-projects.vercel.app/
+Live shop: https://hsm-furniture-epmo-r6ovzn3og-etnas-projects.vercel.app/
 API: https://hsm-furniture.onrender.com
 Demo login: demo@hsm.shop / Demo1234!
 
